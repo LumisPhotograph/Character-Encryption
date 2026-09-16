@@ -1,0 +1,2119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>字符加密器</title>
+<style>
+  :root {
+    --font-scale: 1;
+    --sh-scale: 1;
+    --sh-a: 1;
+    --r-scale: 1;
+
+    --bg:         #FFFFFF;
+    --bg-soft:    #FDFDFD;
+    --s0:         #FFFFFF;
+    --s1:         #FDFDFD;
+    --s2:         #FBFBFB;
+    --s3:         #F7F7F7;
+    --s4:         #F4F4F4;
+    --s5:         #F1F1F1;
+
+    --ink:        #4F4F4F;
+    --ink-strong: #3F3F3F;
+    --ink-2:      #767676;
+    --ink-3:      #A2A2A2;
+
+    --line:       #EAEAEA;
+    --line-soft:  #F1F1F1;
+    --line-btn:   #EDEDED;
+    --line-focus: #DCDCDC;
+
+    --hi-rgb:     255, 255, 255;
+    --shadow-rgb: 0, 0, 0;
+
+    --text-sh:     rgba(255, 255, 255, .95);
+    --noise-dot:   rgba(0, 0, 0, .07);
+    --noise-blend: multiply;
+
+    --scroll-thumb:       rgba(0, 0, 0, .16);
+    --scroll-thumb-hover: rgba(0, 0, 0, .28);
+
+    --ok-ink:  #63825F;
+    --err-ink: #96695F;
+
+    --toggle-on-a: #3cd111;
+    --toggle-on-b: #39ec05;
+
+    --ease:       cubic-bezier(.22, 1, .36, 1);
+    --ease-out:   cubic-bezier(.16, 1, .3, 1);
+    --ease-press: cubic-bezier(.34, .9, .4, 1);
+
+    --r-card:  calc(34px * var(--r-scale));
+    --r-panel: calc(26px * var(--r-scale));
+    --r-box:   calc(20px * var(--r-scale));
+    --r-sub:   calc(16px * var(--r-scale));
+    --r-inp:   calc(14px * var(--r-scale));
+    --r-btn:   calc(16px * var(--r-scale));
+    --r-note:  calc(18px * var(--r-scale));
+
+    --raise-sm:
+      calc(3px * var(--sh-scale)) calc(3px * var(--sh-scale)) calc(8px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.07 * var(--sh-a))),
+      calc(-3px * var(--sh-scale)) calc(-3px * var(--sh-scale)) calc(8px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
+    --raise-md:
+      calc(6px * var(--sh-scale)) calc(6px * var(--sh-scale)) calc(16px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.08 * var(--sh-a))),
+      calc(-6px * var(--sh-scale)) calc(-6px * var(--sh-scale)) calc(16px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
+    --raise-lg:
+      calc(10px * var(--sh-scale)) calc(10px * var(--sh-scale)) calc(28px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.09 * var(--sh-a))),
+      calc(-10px * var(--sh-scale)) calc(-10px * var(--sh-scale)) calc(28px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
+
+    --sink-sm:
+      inset calc(2px * var(--sh-scale)) calc(2px * var(--sh-scale)) calc(5px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.06 * var(--sh-a))),
+      inset calc(-2px * var(--sh-scale)) calc(-2px * var(--sh-scale)) calc(5px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
+    --sink-md:
+      inset calc(4px * var(--sh-scale)) calc(4px * var(--sh-scale)) calc(9px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.07 * var(--sh-a))),
+      inset calc(-3px * var(--sh-scale)) calc(-3px * var(--sh-scale)) calc(8px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
+    --sink-lg:
+      inset calc(6px * var(--sh-scale)) calc(6px * var(--sh-scale)) calc(13px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.08 * var(--sh-a))),
+      inset calc(-4px * var(--sh-scale)) calc(-4px * var(--sh-scale)) calc(10px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
+  }
+
+  html[data-theme="dark"] {
+    --bg:         #151517;
+    --bg-soft:    #1A1A1D;
+    --s0:         #26262A;
+    --s1:         #242428;
+    --s2:         #212125;
+    --s3:         #1E1E22;
+    --s4:         #1B1B1F;
+    --s5:         #18181C;
+
+    --ink:        #C7C7CD;
+    --ink-strong: #E4E4E8;
+    --ink-2:      #98989F;
+    --ink-3:      #6F6F76;
+
+    --line:       #313136;
+    --line-soft:  #2A2A2F;
+    --line-btn:   #2F2F35;
+    --line-focus: #3C3C43;
+
+    --hi-rgb:     58, 58, 66;
+    --shadow-rgb: 0, 0, 0;
+
+    --text-sh:     rgba(0, 0, 0, .45);
+    --noise-dot:   rgba(255, 255, 255, .05);
+    --noise-blend: screen;
+
+    --scroll-thumb:       rgba(255, 255, 255, .16);
+    --scroll-thumb-hover: rgba(255, 255, 255, .28);
+
+    --ok-ink:  #8FB48A;
+    --err-ink: #C99A8F;
+
+    --toggle-on-a: #5E8355;
+    --toggle-on-b: #42603D;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    font-size: calc(100% * var(--font-scale));
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    color: var(--ink);
+    background-color: var(--bg);
+    background-image: radial-gradient(1200px 720px at 50% -14%, var(--bg-soft) 0%, var(--bg) 70%);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding:
+      calc(20px + env(safe-area-inset-top, 0px))
+      calc(14px + env(safe-area-inset-right, 0px))
+      calc(52px + env(safe-area-inset-bottom, 0px))
+      calc(14px + env(safe-area-inset-left, 0px));
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+    transition: background-color .5s var(--ease), color .5s var(--ease);
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .40;
+    background-image: radial-gradient(var(--noise-dot) .8px, transparent .9px);
+    background-size: 3px 3px;
+    mix-blend-mode: var(--noise-blend);
+  }
+
+  .card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1060px;
+    padding: 30px 32px 28px;
+    border-radius: var(--r-card);
+    background: linear-gradient(148deg, var(--s0) 0%, var(--s1) 48%, var(--s2) 100%);
+    box-shadow:
+      var(--raise-lg),
+      inset 0 1px 0 rgba(var(--hi-rgb), .95),
+      inset 0 0 0 1px rgba(var(--hi-rgb), .7);
+    animation: cardIn .85s var(--ease-out) both;
+    transition: background .5s var(--ease), box-shadow .45s var(--ease), border-radius .35s var(--ease);
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translate3d(0, 26px, 0) scale(.975); }
+    60%  { opacity: 1; }
+    to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  }
+
+  .settings-btn {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    z-index: 30;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--line-btn);
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--s0), var(--s4));
+    color: var(--ink-2);
+    font-size: 1.15rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: var(--raise-sm), inset 0 1px 0 rgba(var(--hi-rgb), .9);
+    transition:
+      box-shadow .34s var(--ease),
+      color .3s ease,
+      transform .5s var(--ease),
+      background .5s var(--ease),
+      border-color .5s var(--ease);
+  }
+
+  .settings-btn:active { transform: scale(.93); }
+
+  .settings-btn.active { color: var(--ink-strong); }
+
+  @media (hover: hover) {
+    .settings-btn:hover { color: var(--ink-strong); }
+  }
+
+  .settings-panel {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    z-index: 40;
+    width: min(300px, calc(100vw - 56px));
+    padding: 18px 18px 16px;
+    border-radius: calc(22px * var(--r-scale));
+    background: linear-gradient(148deg, var(--s0), var(--s1));
+    box-shadow:
+      var(--raise-lg),
+      inset 0 1px 0 rgba(var(--hi-rgb), .9),
+      0 0 0 1px var(--line-soft);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate3d(0, -12px, 0) scale(.95);
+    transform-origin: top right;
+    transition:
+      opacity .28s var(--ease),
+      transform .45s var(--ease-out),
+      visibility .28s,
+      background .5s var(--ease),
+      box-shadow .45s var(--ease),
+      border-radius .35s var(--ease);
+  }
+
+  .settings-panel.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  .settings-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    font-size: .9rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    color: var(--ink);
+    text-shadow: 0 1px 0 var(--text-sh);
+  }
+
+  .settings-head span {
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .7px;
+    text-transform: uppercase;
+    padding: 4px 11px;
+    border-radius: 999px;
+    color: var(--ink-3);
+    background: linear-gradient(145deg, var(--s0), var(--s4));
+    box-shadow: var(--sink-sm);
+  }
+
+  .setting-item { margin-bottom: 15px; }
+
+  .setting-item:last-of-type { margin-bottom: 0; }
+
+  .setting-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .7px;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    text-shadow: 0 1px 0 var(--text-sh);
+  }
+
+  .setting-label b {
+    font-weight: 800;
+    font-size: .72rem;
+    letter-spacing: 0;
+    color: var(--ink-2);
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    height: 10px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(145deg, var(--s4), var(--s2));
+    box-shadow: var(--sink-sm);
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 21px;
+    height: 21px;
+    border: 1px solid var(--line-btn);
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--s0), var(--s4));
+    box-shadow:
+      0 2px 5px rgba(var(--shadow-rgb), calc(.18 * var(--sh-a))),
+      inset 0 1px 0 rgba(var(--hi-rgb), .95);
+    cursor: pointer;
+    transition: transform .25s var(--ease);
+  }
+
+  input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.12); }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 19px;
+    height: 19px;
+    border: 1px solid var(--line-btn);
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--s0), var(--s4));
+    box-shadow:
+      0 2px 5px rgba(var(--shadow-rgb), calc(.18 * var(--sh-a))),
+      inset 0 1px 0 rgba(var(--hi-rgb), .95);
+    cursor: pointer;
+  }
+
+  input[type="range"]::-moz-range-track {
+    height: 10px;
+    border-radius: 999px;
+    background: transparent;
+  }
+
+  .settings-panel .checkbox-row { margin: 14px 0 0; }
+
+  .setting-reset {
+    width: 100%;
+    margin-top: 14px;
+    padding: 11px 16px;
+    border-radius: calc(14px * var(--r-scale));
+    border: 1px solid var(--line-btn);
+    background: linear-gradient(145deg, var(--s0), var(--s4));
+    color: var(--ink-2);
+    font-family: inherit;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    cursor: pointer;
+    text-shadow: 0 1px 0 var(--text-sh);
+    box-shadow:
+      inset calc(3px * var(--sh-scale)) calc(3px * var(--sh-scale)) calc(7px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.07 * var(--sh-a))),
+      inset calc(-3px * var(--sh-scale)) calc(-3px * var(--sh-scale)) calc(7px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
+    transition: box-shadow .34s var(--ease), color .3s ease, background .5s var(--ease), border-color .5s var(--ease);
+  }
+
+  .setting-reset:active { color: var(--ink-strong); }
+
+  @media (hover: hover) {
+    .setting-reset:hover { color: var(--ink-strong); }
+  }
+
+  h1 {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 13px;
+    margin: 0 0 12px;
+    padding-right: 56px;
+    font-size: clamp(1.35rem, 4.2vw, 2rem);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -.015em;
+    color: var(--ink);
+    text-shadow: 0 1px 0 var(--text-sh);
+  }
+
+  h1 span {
+    font-size: clamp(.66rem, 2.6vw, .8rem);
+    font-weight: 700;
+    padding: 6px 15px;
+    border-radius: 999px;
+    color: var(--ink-3);
+    white-space: nowrap;
+    letter-spacing: .4px;
+    background: linear-gradient(145deg, var(--s0), var(--s4));
+    box-shadow:
+      var(--sink-sm),
+      inset 0 1px 0 rgba(var(--hi-rgb), .9);
+    text-shadow: 0 1px 0 var(--text-sh);
+  }
+
+  .subhead {
+    position: relative;
+    margin-bottom: 24px;
+    padding: 13px 18px 13px 20px;
+    border-radius: var(--r-sub);
+    font-size: clamp(.78rem, 3vw, .88rem);
+    line-height: 1.65;
+    color: var(--ink-2);
+    background: linear-gradient(145deg, var(--s2), var(--s4));
+    box-shadow:
+      var(--sink-sm),
+      inset 0 1px 0 rgba(var(--hi-rgb), .8);
+    overflow: hidden;
+    transition: background .5s var(--ease), border-radius .35s var(--ease);
+  }
+
+  .subhead::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 13px;
+    bottom: 13px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: linear-gradient(180deg, var(--line), var(--ink-3));
+    box-shadow: 0 0 0 1px rgba(var(--hi-rgb), .7);
+  }
+
+  .subhead code {
+    padding: 1px 8px;
+    border-radius: 30px;
+    font-size: .85em;
+    font-weight: 650;
+    color: var(--ink-2);
+    background: var(--s3);
+    box-shadow: inset 1px 1px 3px rgba(var(--shadow-rgb), .10), inset -1px -1px 3px rgba(var(--hi-rgb), .95);
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .panel {
+    position: relative;
+    padding: 22px 21px 20px;
+    border-radius: var(--r-panel);
+    background: linear-gradient(148deg, var(--s0) 0%, var(--s2) 100%);
+    box-shadow:
+      var(--raise-md),
+      inset 0 1px 0 rgba(var(--hi-rgb), .95);
+    animation: panelIn .8s var(--ease-out) both;
+    transition:
+      box-shadow .45s var(--ease),
+      transform .45s var(--ease),
+      background .5s var(--ease),
+      border-radius .35s var(--ease);
+  }
+
+  @keyframes panelIn {
+    from { opacity: 0; transform: translate3d(0, 20px, 0) scale(.99); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  }
+
+  .grid-2 .panel:nth-child(1) { animation-delay: .10s; }
+  .grid-2 .panel:nth-child(2) { animation-delay: .18s; }
+
+  @media (hover: hover) {
+    .panel:hover {
+      transform: translate3d(0, -3px, 0);
+      box-shadow:
+        calc(10px * var(--sh-scale)) calc(12px * var(--sh-scale)) calc(26px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.10 * var(--sh-a))),
+        calc(-9px * var(--sh-scale)) calc(-9px * var(--sh-scale)) calc(24px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a))),
+        inset 0 1px 0 rgba(var(--hi-rgb), .95);
+    }
+  }
+
+  .panel h2 {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 0 17px;
+    font-size: clamp(1.02rem, 3.4vw, 1.15rem);
+    font-weight: 800;
+    letter-spacing: -.005em;
+    color: var(--ink);
+    text-shadow: 0 1px 0 var(--text-sh);
+  }
+
+  .panel h2 i {
+    font-style: normal;
+    font-size: clamp(.58rem, 2.4vw, .68rem);
+    font-weight: 700;
+    letter-spacing: .4px;
+    padding: 4px 11px;
+    border-radius: 999px;
+    color: var(--ink-3);
+    background: linear-gradient(145deg, var(--s0), var(--s4));
+    box-shadow: var(--sink-sm);
+    text-shadow: 0 1px 0 var(--text-sh);
+  }
+
+  label {
+    display: block;
+    margin: 15px 0 7px;
+    font-size: clamp(.66rem, 2.6vw, .71rem);
+    font-weight: 800;
+    letter-spacing: .9px;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    text-shadow: 0 1px 0 var(--text-sh);
+  }
+
+  label:first-of-type { margin-top: 0; }
+
+  input:not([type="range"]):not([type="checkbox"]),
+  textarea,
+  select {
+    width: 100%;
+    padding: 12px 15px;
+    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 1rem;
+    font-weight: 550;
+    color: var(--ink);
+    background: linear-gradient(145deg, var(--s3), var(--s2));
+    border: 1px solid var(--line-soft);
+    border-radius: var(--r-inp);
+    box-shadow: var(--sink-md);
+    transition:
+      box-shadow .32s var(--ease),
+      border-color .32s ease,
+      background .32s ease,
+      color .32s ease,
+      border-radius .35s var(--ease);
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] { -moz-appearance: textfield; }
+
+  input:not([type="range"]):not([type="checkbox"]):focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--line-focus);
+    background: linear-gradient(145deg, var(--s4), var(--s1));
+    box-shadow:
+      inset calc(5px * var(--sh-scale)) calc(5px * var(--sh-scale)) calc(11px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.08 * var(--sh-a))),
+      inset calc(-4px * var(--sh-scale)) calc(-4px * var(--sh-scale)) calc(10px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a))),
+      0 0 0 3px rgba(var(--shadow-rgb), .05);
+  }
+
+  textarea {
+    min-height: 88px;
+    line-height: 1.55;
+    resize: vertical;
+  }
+
+  select {
+    cursor: pointer;
+    font-family: system-ui, sans-serif;
+    font-weight: 650;
+    padding-right: 40px;
+    background-image:
+      linear-gradient(145deg, var(--s3), var(--s2)),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat, no-repeat;
+    background-position: 0 0, right 15px center;
+    background-size: 100% 100%, 11px;
+  }
+
+  select:focus {
+    background-image:
+      linear-gradient(145deg, var(--s4), var(--s1)),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  }
+
+  select option {
+    background: var(--s0);
+    color: var(--ink);
+  }
+
+  textarea::-webkit-scrollbar,
+  .result-content::-webkit-scrollbar { width: 9px; height: 9px; }
+
+  textarea::-webkit-scrollbar-thumb,
+  .result-content::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    border-radius: 20px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  textarea::-webkit-scrollbar-thumb:hover,
+  .result-content::-webkit-scrollbar-thumb:hover {
+    background: var(--scroll-thumb-hover);
+    background-clip: content-box;
+  }
+
+  textarea::-webkit-scrollbar-track,
+  .result-content::-webkit-scrollbar-track { background: transparent; }
+
+  .row-ak {
+    display: flex;
+    gap: 13px;
+  }
+
+  .row-ak .field {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 11px;
+    flex-wrap: wrap;
+    margin: 20px 0 8px;
+  }
+
+  .btn {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 13px 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: var(--r-btn);
+    border: 1px solid var(--line-btn);
+    background: linear-gradient(145deg, var(--s0) 0%, var(--s4) 100%);
+    color: var(--ink-2);
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    text-shadow: 0 1px 0 var(--text-sh);
+    box-shadow:
+      inset calc(3px * var(--sh-scale)) calc(3px * var(--sh-scale)) calc(7px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.07 * var(--sh-a))),
+      inset calc(-3px * var(--sh-scale)) calc(-3px * var(--sh-scale)) calc(7px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a))),
+      0 1px 0 rgba(var(--hi-rgb), .7);
+    transition:
+      box-shadow .34s var(--ease),
+      color .34s ease,
+      transform .34s var(--ease),
+      background .5s var(--ease),
+      border-color .5s var(--ease),
+      border-radius .35s var(--ease);
+  }
+
+  .btn:active {
+    color: var(--ink-strong);
+    transform: translate3d(0, 1px, 0);
+    box-shadow:
+      inset calc(6px * var(--sh-scale)) calc(6px * var(--sh-scale)) calc(13px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.11 * var(--sh-a))),
+      inset calc(-3px * var(--sh-scale)) calc(-3px * var(--sh-scale)) calc(8px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
+  }
+
+  .btn-primary {
+    color: var(--ink);
+    border-color: var(--line);
+    background: linear-gradient(145deg, var(--s0) 0%, var(--s5) 100%);
+    box-shadow:
+      inset calc(3px * var(--sh-scale)) calc(3px * var(--sh-scale)) calc(8px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.09 * var(--sh-a))),
+      inset calc(-3px * var(--sh-scale)) calc(-3px * var(--sh-scale)) calc(8px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a))),
+      0 1px 0 rgba(var(--hi-rgb), .75);
+  }
+
+  .btn-primary:active {
+    color: var(--ink-strong);
+    box-shadow:
+      inset calc(7px * var(--sh-scale)) calc(7px * var(--sh-scale)) calc(15px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.13 * var(--sh-a))),
+      inset calc(-3px * var(--sh-scale)) calc(-3px * var(--sh-scale)) calc(8px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.9 * var(--sh-a)));
+  }
+
+  @media (hover: hover) {
+    .btn:hover {
+      box-shadow:
+        inset calc(5px * var(--sh-scale)) calc(5px * var(--sh-scale)) calc(10px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.09 * var(--sh-a))),
+        inset calc(-3px * var(--sh-scale)) calc(-3px * var(--sh-scale)) calc(8px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a))),
+        0 1px 0 rgba(var(--hi-rgb), .7);
+    }
+    .btn-primary:hover {
+      box-shadow:
+        inset calc(5px * var(--sh-scale)) calc(5px * var(--sh-scale)) calc(11px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.11 * var(--sh-a))),
+        inset calc(-3px * var(--sh-scale)) calc(-3px * var(--sh-scale)) calc(8px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
+    }
+  }
+
+  .btn:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  .result-box {
+    margin-top: 16px;
+    padding: 15px 16px 14px;
+    border-radius: var(--r-box);
+    background: linear-gradient(145deg, var(--s0), var(--s2));
+    box-shadow:
+      var(--raise-sm),
+      inset 0 1px 0 rgba(var(--hi-rgb), .92);
+    transition: background .5s var(--ease), border-radius .35s var(--ease), box-shadow .45s var(--ease);
+  }
+
+  .result-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: clamp(.63rem, 2.5vw, .69rem);
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    text-shadow: 0 1px 0 var(--text-sh);
+  }
+
+  .result-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid var(--line-btn);
+    background: linear-gradient(145deg, var(--s0), var(--s4));
+    color: var(--ink-2);
+    font-size: .85rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow:
+      inset calc(2px * var(--sh-scale)) calc(2px * var(--sh-scale)) calc(5px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.06 * var(--sh-a))),
+      inset calc(-2px * var(--sh-scale)) calc(-2px * var(--sh-scale)) calc(5px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
+    transition:
+      box-shadow .34s var(--ease),
+      color .3s ease,
+      background .3s ease,
+      transform .34s var(--ease),
+      border-color .5s var(--ease);
+  }
+
+  .icon-btn:active {
+    transform: translate3d(0, 1px, 0);
+    box-shadow:
+      inset calc(4px * var(--sh-scale)) calc(4px * var(--sh-scale)) calc(9px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.10 * var(--sh-a))),
+      inset calc(-2px * var(--sh-scale)) calc(-2px * var(--sh-scale)) calc(5px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.9 * var(--sh-a)));
+  }
+
+  @media (hover: hover) {
+    .icon-btn:hover { color: var(--ink-strong); }
+  }
+
+  .icon-btn.copied {
+    color: var(--ok-ink);
+    background: linear-gradient(145deg, var(--s0), var(--s3));
+    border-color: var(--line);
+    box-shadow:
+      inset calc(3px * var(--sh-scale)) calc(3px * var(--sh-scale)) calc(7px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.10 * var(--sh-a))),
+      inset calc(-2px * var(--sh-scale)) calc(-2px * var(--sh-scale)) calc(5px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
+    animation: copyPop .42s var(--ease);
+  }
+
+  @keyframes copyPop {
+    0%   { transform: scale(1); }
+    45%  { transform: scale(1.16); }
+    100% { transform: scale(1); }
+  }
+
+  .result-content {
+    margin-top: 11px;
+    padding: 14px 16px;
+    min-height: 72px;
+    max-height: 240px;
+    overflow: auto;
+    border-radius: var(--r-inp);
+    background: linear-gradient(145deg, var(--s3), var(--s2));
+    border: 1px solid var(--line-soft);
+    box-shadow: var(--sink-md);
+    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: .92rem;
+    font-weight: 550;
+    line-height: 1.65;
+    color: var(--ink);
+    word-break: break-word;
+    white-space: pre-wrap;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    transition: background .5s var(--ease), color .5s var(--ease), border-radius .35s var(--ease);
+  }
+
+  .result-content.pop {
+    animation: resultPop .5s var(--ease-out);
+  }
+
+  @keyframes resultPop {
+    from { opacity: .25; transform: translate3d(0, 7px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+
+  .loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 22px 0 12px;
+  }
+
+  .loader .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--s5), var(--ink-3));
+    box-shadow:
+      0 2px 4px rgba(var(--shadow-rgb), calc(.12 * var(--sh-a))),
+      inset 0 1px 0 rgba(var(--hi-rgb), .85);
+    animation: dotBounce 1.15s infinite ease-in-out both;
+    will-change: transform, opacity;
+  }
+
+  .loader .dot:nth-child(1) { animation-delay: -.24s; }
+  .loader .dot:nth-child(2) { animation-delay: -.12s; }
+
+  @keyframes dotBounce {
+    0%, 80%, 100% { transform: translate3d(0, 0, 0) scale(.65); opacity: .35; }
+    40%           { transform: translate3d(0, -7px, 0) scale(1); opacity: 1; }
+  }
+
+  .note {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: var(--r-note);
+    font-size: clamp(.68rem, 2.6vw, .75rem);
+    line-height: 1.75;
+    text-align: center;
+    color: var(--ink-2);
+    background: linear-gradient(145deg, var(--s2), var(--s4));
+    box-shadow:
+      var(--sink-sm),
+      inset 0 1px 0 rgba(var(--hi-rgb), .8);
+    transition: background .5s var(--ease), border-radius .35s var(--ease);
+  }
+
+  .note code {
+    padding: 1px 8px;
+    border-radius: 30px;
+    font-weight: 650;
+    color: var(--ink-2);
+    background: var(--s3);
+    box-shadow: inset 1px 1px 3px rgba(var(--shadow-rgb), .10), inset -1px -1px 3px rgba(var(--hi-rgb), .95);
+  }
+
+  .error-msg,
+  .success-msg,
+  .info-msg {
+    display: none;
+    margin-top: 11px;
+    padding: 10px 16px;
+    border-radius: var(--r-inp);
+    font-size: .81rem;
+    font-weight: 650;
+    line-height: 1.55;
+    word-break: break-word;
+    box-shadow: var(--sink-sm);
+  }
+
+  .error-msg {
+    color: var(--err-ink);
+    background: linear-gradient(145deg, var(--s1), var(--s3));
+  }
+
+  .success-msg {
+    color: var(--ok-ink);
+    background: linear-gradient(145deg, var(--s1), var(--s3));
+  }
+
+  .info-msg {
+    color: var(--ink-2);
+    background: linear-gradient(145deg, var(--s2), var(--s4));
+  }
+
+  .error-msg.show,
+  .success-msg.show,
+  .info-msg.show {
+    display: block;
+    animation: msgIn .45s var(--ease-out);
+  }
+
+  @keyframes msgIn {
+    from { opacity: 0; transform: translate3d(0, -6px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin: 13px 0 6px;
+    padding: 11px 15px;
+    border-radius: var(--r-sub);
+    background: linear-gradient(145deg, var(--s2), var(--s4));
+    box-shadow:
+      var(--sink-sm),
+      inset 0 1px 0 rgba(var(--hi-rgb), .8);
+    transition: background .5s var(--ease), border-radius .35s var(--ease);
+  }
+
+  .checkbox-row input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    flex-shrink: 0;
+    width: 46px;
+    height: 27px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(145deg, var(--s5), var(--s3));
+    cursor: pointer;
+    box-shadow:
+      inset calc(3px * var(--sh-scale)) calc(3px * var(--sh-scale)) calc(6px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.09 * var(--sh-a))),
+      inset calc(-2px * var(--sh-scale)) calc(-2px * var(--sh-scale)) calc(5px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
+    transition: background .4s var(--ease), box-shadow .4s var(--ease);
+  }
+
+  .checkbox-row input[type="checkbox"]::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--s0), var(--s3));
+    box-shadow:
+      0 2px 5px rgba(var(--shadow-rgb), calc(.16 * var(--sh-a))),
+      inset 0 1px 0 rgba(var(--hi-rgb), .98);
+    transform: translate3d(0, 0, 0);
+    transition: transform .46s cubic-bezier(.34, 1.4, .5, 1), background .4s var(--ease), box-shadow .4s var(--ease);
+    will-change: transform;
+  }
+
+  .checkbox-row input[type="checkbox"]:checked {
+    background: linear-gradient(145deg, var(--toggle-on-a), var(--toggle-on-b));
+    box-shadow:
+      inset calc(3px * var(--sh-scale)) calc(3px * var(--sh-scale)) calc(6px * var(--sh-scale)) rgba(0, 0, 0, calc(.22 * var(--sh-a))),
+      inset calc(-2px * var(--sh-scale)) calc(-2px * var(--sh-scale)) calc(5px * var(--sh-scale)) rgba(255, 255, 255, calc(.30 * var(--sh-a)));
+  }
+
+  .checkbox-row input[type="checkbox"]:checked::after {
+    transform: translate3d(19px, 0, 0);
+    background: linear-gradient(145deg, #FFFFFF, #F0F5EE);
+    box-shadow:
+      0 2px 6px rgba(0, 0, 0, calc(.26 * var(--sh-a))),
+      inset 0 1px 0 rgba(255, 255, 255, .98);
+  }
+
+  .checkbox-row label {
+    margin: 0;
+    font-size: clamp(.77rem, 2.8vw, .83rem);
+    font-weight: 650;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink);
+    line-height: 1.45;
+    cursor: pointer;
+  }
+
+  .translate-panel { margin-top: 20px; }
+
+  .translate-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 13px;
+  }
+
+  .translate-row .field {
+    flex: 1 1 240px;
+    min-width: 0;
+  }
+
+  .translate-row .field-narrow {
+    flex: 1 1 170px;
+    min-width: 0;
+  }
+
+  .hint {
+    margin: 6px 0 15px;
+    padding-left: 13px;
+    border-left: 2px solid var(--line);
+    font-size: .76rem;
+    line-height: 1.65;
+    color: var(--ink-3);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 11px;
+    border-radius: 999px;
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .7px;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    background: linear-gradient(145deg, var(--s0), var(--s4));
+    box-shadow: var(--sink-sm);
+    text-shadow: 0 1px 0 var(--text-sh);
+  }
+
+  .textarea-wrap { position: relative; }
+
+  .textarea-wrap textarea { padding-right: 48px; }
+
+  .textarea-wrap .paste-btn {
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    z-index: 3;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid var(--line-btn);
+    background: linear-gradient(145deg, var(--s0), var(--s4));
+    color: var(--ink-2);
+    font-size: .85rem;
+    cursor: pointer;
+    box-shadow:
+      inset calc(2px * var(--sh-scale)) calc(2px * var(--sh-scale)) calc(5px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.06 * var(--sh-a))),
+      inset calc(-2px * var(--sh-scale)) calc(-2px * var(--sh-scale)) calc(5px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
+    transition:
+      box-shadow .34s var(--ease),
+      color .3s ease,
+      transform .34s var(--ease),
+      background .5s var(--ease),
+      border-color .5s var(--ease);
+  }
+
+  .textarea-wrap .paste-btn:active {
+    transform: translate3d(0, 1px, 0);
+    box-shadow:
+      inset calc(4px * var(--sh-scale)) calc(4px * var(--sh-scale)) calc(9px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.10 * var(--sh-a))),
+      inset calc(-2px * var(--sh-scale)) calc(-2px * var(--sh-scale)) calc(5px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.9 * var(--sh-a)));
+  }
+
+  @media (hover: hover) {
+    .textarea-wrap .paste-btn:hover { color: var(--ink-strong); }
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    z-index: 9999;
+    padding: 13px 28px;
+    border-radius: 999px;
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--ink-2);
+    pointer-events: none;
+    background: linear-gradient(145deg, var(--s0), var(--s2));
+    box-shadow:
+      0 14px 30px -10px rgba(var(--shadow-rgb), .20),
+      -3px -3px 10px rgba(var(--hi-rgb), .5),
+      inset 0 1px 0 rgba(var(--hi-rgb), .98);
+    opacity: 0;
+    transform: translate3d(-50%, 130%, 0) scale(.92);
+    transition:
+      opacity .3s ease,
+      transform .52s var(--ease-out);
+    will-change: transform, opacity;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translate3d(-50%, 0, 0) scale(1);
+  }
+
+  .toast.success { color: var(--ok-ink); }
+
+  .toast.error { color: var(--err-ink); }
+
+  @media (max-width: 820px) {
+    :root {
+      --r-card:  calc(28px * var(--r-scale));
+      --r-panel: calc(20px * var(--r-scale));
+    }
+
+    .card {
+      padding: 24px 19px 22px;
+    }
+
+    .panel {
+      padding: 18px 16px 18px;
+    }
+
+    .grid-2 { gap: 16px; }
+  }
+
+  @media (max-width: 560px) {
+    :root {
+      --r-card:  calc(24px * var(--r-scale));
+      --r-panel: calc(18px * var(--r-scale));
+    }
+
+    body {
+      padding:
+        calc(13px + env(safe-area-inset-top, 0px))
+        calc(10px + env(safe-area-inset-right, 0px))
+        calc(38px + env(safe-area-inset-bottom, 0px))
+        calc(10px + env(safe-area-inset-left, 0px));
+    }
+
+    .card {
+      padding: 19px 14px 17px;
+    }
+
+    .panel {
+      padding: 16px 13px 16px;
+    }
+
+    .subhead {
+      padding: 11px 14px 11px 16px;
+      margin-bottom: 17px;
+    }
+
+    .settings-btn {
+      top: 14px;
+      right: 15px;
+      width: 38px;
+      height: 38px;
+      font-size: 1.05rem;
+    }
+
+    .settings-panel {
+      top: 62px;
+      right: 15px;
+    }
+
+    .btn { padding: 14px 18px; }
+    .icon-btn { width: 36px; height: 36px; }
+    .textarea-wrap .paste-btn { width: 36px; height: 36px; top: 8px; right: 8px; }
+
+    .translate-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .translate-row .field,
+    .translate-row .field-narrow {
+      flex: 1 1 auto;
+      width: 100%;
+    }
+
+    .note {
+      padding: 14px 15px;
+      text-align: left;
+    }
+  }
+
+  @media (max-width: 380px) {
+    :root {
+      --r-card:  calc(20px * var(--r-scale));
+      --r-panel: calc(15px * var(--r-scale));
+    }
+
+    h1 { gap: 9px; padding-right: 50px; }
+    h1 span { padding: 5px 12px; }
+
+    .card {
+      padding: 15px 11px 15px;
+    }
+
+    .panel {
+      padding: 14px 11px 15px;
+    }
+
+    .btn-group {
+      gap: 9px;
+      margin: 16px 0 6px;
+    }
+
+    .btn {
+      padding: 13px 13px;
+      font-size: .85rem;
+      border-radius: calc(13px * var(--r-scale));
+    }
+
+    .row-ak { gap: 9px; }
+    .checkbox-row { padding: 10px 12px; gap: 10px; }
+    .result-content { padding: 12px 13px; font-size: .88rem; }
+  }
+
+  @media (max-height: 520px) and (orientation: landscape) {
+    body { padding-top: calc(10px + env(safe-area-inset-top, 0px)); }
+    .card { padding: 17px 19px 15px; }
+    .subhead { margin-bottom: 15px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <button class="settings-btn" id="settingsBtn" title="设置" aria-label="设置">⚙</button>
+
+  <div class="settings-panel" id="settingsPanel">
+    <div class="settings-head">
+      设置
+      <span>Preferences</span>
+    </div>
+
+    <div class="setting-item">
+      <div class="setting-label"><span>字符大小</span><b id="fontVal">100%</b></div>
+      <input type="range" id="fontRange" min="80" max="140" step="5" value="100">
+    </div>
+
+    <div class="setting-item">
+      <div class="setting-label"><span>阴影程度</span><b id="shadowVal">100%</b></div>
+      <input type="range" id="shadowRange" min="0" max="150" step="5" value="100">
+    </div>
+
+    <div class="setting-item">
+      <div class="setting-label"><span>圆角弧度</span><b id="radiusVal">100%</b></div>
+      <input type="range" id="radiusRange" min="0" max="200" step="5" value="100">
+    </div>
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="darkToggle">
+      <label for="darkToggle">暗色模式</label>
+    </div>
+
+    <button class="setting-reset" id="resetSettings">恢复默认</button>
+  </div>
+
+  <h1>
+    字符加密器
+    <span>无限进步！</span>
+  </h1>
+  <div class="subhead">
+    Lumis 2026©
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <h2>加密 <i>A→1 · 1→A</i></h2>
+
+      <label>待加密文本</label>
+      <textarea id="plainText" placeholder="例如: HELLO WORLD 或 1234 或 你好世界">HELLO WORLD</textarea>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="autoTranslate" checked>
+        <label for="autoTranslate">自动检测语言：非英语时先翻译为英文再加密</label>
+      </div>
+
+      <div class="row-ak">
+        <div class="field">
+          <label>a (二次项系数，可为负/小数)</label>
+          <input type="number" id="encA" value="1" step="any" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label>k (常数项，可为负/小数)</label>
+          <input type="number" id="encK" value="0" step="any" inputmode="decimal">
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" id="encryptBtn">加密</button>
+        <button class="btn" id="clearEncBtn">清空</button>
+      </div>
+
+      <div class="result-box">
+        <div class="result-label">
+          <span>加密结果</span>
+          <div class="result-actions">
+            <button class="icon-btn" id="copyEncryptBtn" title="复制加密结果">⧉</button>
+          </div>
+        </div>
+        <div class="result-content" id="encryptResult">—</div>
+      </div>
+      <div id="encryptTranslateInfo" class="info-msg"></div>
+      <div id="encryptError" class="error-msg"></div>
+    </div>
+
+    <div class="panel">
+      <h2>解密 <i>x±自检</i></h2>
+
+      <label>密文 (数字或字母,逗号分隔)</label>
+      <textarea id="cipherText" placeholder="例如: 8,5,12,12,15,27,23,15,18,12,4 或 A,B,C,D">8,5,12,12,15,27,23,15,18,12,4</textarea>
+
+      <div class="row-ak">
+        <div class="field">
+          <label>a (同加密，可为负/小数)</label>
+          <input type="number" id="decA" value="1" step="any" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label>k (同加密，可为负/小数)</label>
+          <input type="number" id="decK" value="0" step="any" inputmode="decimal">
+        </div>
+      </div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="translateOutput">
+        <label for="translateOutput">将解密结果翻译为中文（勾选后输出中文）</label>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" id="decryptBtn">解密</button>
+        <button class="btn" id="clearDecBtn">清空</button>
+      </div>
+
+      <div class="result-box">
+        <div class="result-label">
+          <span>解密结果</span>
+          <div class="result-actions">
+            <button class="icon-btn" id="copyDecryptBtn" title="复制解密结果">⧉</button>
+          </div>
+        </div>
+        <div class="result-content" id="decryptResult">—</div>
+      </div>
+      <div id="decryptError" class="error-msg"></div>
+    </div>
+  </div>
+
+  <div class="panel translate-panel">
+    <h2>翻译工具 <i>输出英文</i></h2>
+    <div class="hint">
+      免费翻译服务由Lumis提供，如无法访问请检查网络。支持中文、日文、韩文、法文等多种语言。
+    </div>
+
+    <div class="translate-row">
+      <div class="field field-narrow">
+        <label>源语言</label>
+        <select id="sourceLang">
+          <option value="auto" selected>自动检测</option>
+          <option value="zh-CN">中文（简体）</option>
+          <option value="zh-TW">中文（繁体）</option>
+          <option value="ja">日语</option>
+          <option value="ko">韩语</option>
+          <option value="fr">法语</option>
+          <option value="de">德语</option>
+          <option value="es">西班牙语</option>
+          <option value="ru">俄语</option>
+          <option value="pt">葡萄牙语</option>
+          <option value="it">意大利语</option>
+          <option value="ar">阿拉伯语</option>
+          <option value="en">英语（原样返回）</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>待翻译文本</label>
+        <div class="textarea-wrap">
+          <textarea id="translateInput" placeholder="输入中文或其他语言，例如：你好世界"></textarea>
+          <button class="paste-btn" id="pasteTranslateBtn" title="粘贴剪贴板内容">⎘</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" id="translateBtn">翻译为英文</button>
+      <button class="btn" id="applyToEncryptBtn">应用到加密输入框</button>
+      <button class="btn" id="clearTranslateBtn">清空</button>
+    </div>
+
+    <div class="result-box">
+      <div class="result-label">
+        <span>翻译结果（英文）</span>
+        <div class="result-actions">
+          <span class="badge">English</span>
+          <button class="icon-btn" id="copyTranslateBtn" title="复制翻译结果">⧉</button>
+        </div>
+      </div>
+      <div class="result-content" id="translateResult">—</div>
+    </div>
+    <div id="translateError" class="error-msg"></div>
+    <div id="translateSuccess" class="success-msg"></div>
+  </div>
+
+  <div class="note">
+   2026Lumis©
+  <br>语言检测: 自动识别中文、日文、韩文等，非英语内容先翻译为英文再次加密，多次翻译可能偏离本意？
+  使用此翻译器代表同意隐私政策
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  (function() {
+    var charToNum = {};
+    var numToChar = {};
+    for (var i = 0; i < 26; i++) {
+      var ch = String.fromCharCode(65 + i);
+      charToNum[ch] = i + 1;
+      numToChar[i + 1] = ch;
+    }
+    charToNum[','] = 27;
+    numToChar[27] = ',';
+    var SPACE_CODE = 1225;
+
+    var digitToLetter = {
+      '0': 'J', '1': 'A', '2': 'B', '3': 'C', '4': 'D',
+      '5': 'E', '6': 'F', '7': 'G', '8': 'H', '9': 'I'
+    };
+    var letterToDigit = {
+      'A': '1', 'B': '2', 'C': '3', 'D': '4', 'E': '5',
+      'F': '6', 'G': '7', 'H': '8', 'I': '9', 'J': '0'
+    };
+
+    var LANG_NAMES = {
+      'zh-CN': '中文（简体）',
+      'zh-TW': '中文（繁体）',
+      'ja': '日语',
+      'ko': '韩语',
+      'fr': '法语',
+      'de': '德语',
+      'es': '西班牙语',
+      'ru': '俄语',
+      'pt': '葡萄牙语',
+      'it': '意大利语',
+      'ar': '阿拉伯语',
+      'en': '英语',
+      'el': '希腊语',
+      'he': '希伯来语',
+      'th': '泰语'
+    };
+
+    function getLangName(code) {
+      return LANG_NAMES[code] || code;
+    }
+
+    function isEncryptableChar(ch) {
+      return /[A-Za-z,]/.test(ch);
+    }
+
+    function detectLanguage(text) {
+      if (!text || !text.trim()) return 'en';
+      var sample = text.slice(0, 300);
+
+      if (/[\u4e00-\u9fff]/.test(sample)) return 'zh-CN';
+      if (/[\u3040-\u309f\u30a0-\u30ff]/.test(sample)) return 'ja';
+      if (/[\uac00-\ud7af\u1100-\u11ff]/.test(sample)) return 'ko';
+      if (/[\u0400-\u04ff]/.test(sample)) return 'ru';
+      if (/[\u0600-\u06ff]/.test(sample)) return 'ar';
+      if (/[\u0370-\u03ff]/.test(sample)) return 'el';
+      if (/[\u0590-\u05ff]/.test(sample)) return 'he';
+      if (/[\u0e00-\u0e7f]/.test(sample)) return 'th';
+      if (/[A-Za-z]/.test(sample)) return 'en';
+      return 'en';
+    }
+
+    function encryptText(text, a, k) {
+      if (text.length === 0) return '';
+      var resultCodes = [];
+
+      for (var i = 0; i < text.length; i++) {
+        var ch = text[i];
+        var upperCh = ch.toUpperCase();
+
+        if (ch >= '0' && ch <= '9') {
+          resultCodes.push(digitToLetter[ch]);
+        } else if (ch === ' ') {
+          resultCodes.push(SPACE_CODE);
+        } else if (isEncryptableChar(ch)) {
+          var num;
+          if (upperCh === ',') {
+            num = 27;
+          } else {
+            num = charToNum[upperCh];
+          }
+          var x = num;
+          var y = a * x * x + k;
+          resultCodes.push(y);
+        } else {
+          resultCodes.push(ch);
+        }
+      }
+
+      return resultCodes.map(function(v) {
+        if (typeof v === 'number') {
+          return v.toString();
+        } else {
+          return v;
+        }
+      }).join(',');
+    }
+
+    function isValidX(x) {
+      return x === 27 || (x >= 1 && x <= 26);
+    }
+
+    function decryptText(cipherStr, a, k) {
+      if (cipherStr.trim() === '') return '';
+
+      var tokens = cipherStr.split(',').map(function(t) { return t.trim(); });
+      var result = '';
+
+      if (a === 0) {
+        return '错误: a 不能为 0 (解密需要二次项)';
+      }
+
+      for (var i = 0; i < tokens.length; i++) {
+        var token = tokens[i];
+
+        if (token.length === 1 && letterToDigit.hasOwnProperty(token)) {
+          result += letterToDigit[token];
+          continue;
+        }
+
+        var numY = Number(token);
+        if (isNaN(numY)) {
+          result += token;
+          continue;
+        }
+
+        if (numY === SPACE_CODE) {
+          result += ' ';
+          continue;
+        }
+
+        var delta = (numY - k) / a;
+        if (delta < 0) {
+          result += '[?' + token + ']';
+          continue;
+        }
+
+        var sqrtDelta = Math.sqrt(delta);
+
+        var found = null;
+        var candidates = [sqrtDelta, -sqrtDelta];
+        for (var j = 0; j < candidates.length; j++) {
+          var cand = candidates[j];
+          var xInt = Math.round(cand);
+          if (Math.abs(cand - xInt) < 1e-6) {
+            if (isValidX(xInt)) {
+              found = xInt;
+              break;
+            }
+          }
+        }
+
+        if (found === null) {
+          result += '[?' + token + ']';
+          continue;
+        }
+
+        if (found === 27) {
+          result += ',';
+        } else if (found >= 1 && found <= 26) {
+          result += String.fromCharCode(64 + found);
+        } else {
+          result += '[?]';
+        }
+      }
+
+      return result;
+    }
+
+    function translateText(text, sourceLang, targetLang) {
+      return new Promise(function(resolve, reject) {
+        if (!text.trim()) {
+          resolve('');
+          return;
+        }
+        var url = 'https://api.mymemory.translated.net/get?q=' +
+          encodeURIComponent(text) +
+          '&langpair=' + encodeURIComponent(sourceLang) + '|' + encodeURIComponent(targetLang);
+
+        fetch(url)
+          .then(function(response) {
+            if (!response.ok) {
+              throw new Error('网络请求失败');
+            }
+            return response.json();
+          })
+          .then(function(data) {
+            if (data && data.responseData && data.responseData.translatedText) {
+              resolve(data.responseData.translatedText);
+            } else if (data && data.responseStatus && String(data.responseStatus) !== '200') {
+              reject(new Error('翻译服务返回错误: ' + (data.responseDetails || '未知错误')));
+            } else {
+              reject(new Error('无法解析翻译结果'));
+            }
+          })
+          .catch(function(err) {
+            reject(err);
+          });
+      });
+    }
+
+    var plainTextEl = document.getElementById('plainText');
+    var encAEl = document.getElementById('encA');
+    var encKEl = document.getElementById('encK');
+    var encryptResultEl = document.getElementById('encryptResult');
+    var encryptTranslateInfoEl = document.getElementById('encryptTranslateInfo');
+    var encryptErrorEl = document.getElementById('encryptError');
+    var autoTranslateEl = document.getElementById('autoTranslate');
+
+    var cipherTextEl = document.getElementById('cipherText');
+    var decAEl = document.getElementById('decA');
+    var decKEl = document.getElementById('decK');
+    var decryptResultEl = document.getElementById('decryptResult');
+    var decryptErrorEl = document.getElementById('decryptError');
+    var translateOutputEl = document.getElementById('translateOutput');
+
+    var translateInputEl = document.getElementById('translateInput');
+    var sourceLangEl = document.getElementById('sourceLang');
+    var translateResultEl = document.getElementById('translateResult');
+    var translateErrorEl = document.getElementById('translateError');
+    var translateSuccessEl = document.getElementById('translateSuccess');
+    var translateBtn = document.getElementById('translateBtn');
+    var applyToEncryptBtn = document.getElementById('applyToEncryptBtn');
+    var clearTranslateBtn = document.getElementById('clearTranslateBtn');
+
+    var toastEl = document.getElementById('toast');
+    var toastTimer = null;
+
+    var settingsBtn = document.getElementById('settingsBtn');
+    var settingsPanel = document.getElementById('settingsPanel');
+    var fontRange = document.getElementById('fontRange');
+    var shadowRange = document.getElementById('shadowRange');
+    var radiusRange = document.getElementById('radiusRange');
+    var fontVal = document.getElementById('fontVal');
+    var shadowVal = document.getElementById('shadowVal');
+    var radiusVal = document.getElementById('radiusVal');
+    var darkToggle = document.getElementById('darkToggle');
+    var resetSettingsBtn = document.getElementById('resetSettings');
+
+    var SETTINGS_KEY = 'lumis-char-enc-settings';
+    var defaultSettings = { font: 100, shadow: 100, radius: 100, dark: false };
+    var settings = { font: 100, shadow: 100, radius: 100, dark: false };
+
+    try {
+      var savedRaw = localStorage.getItem(SETTINGS_KEY);
+      if (savedRaw) {
+        var saved = JSON.parse(savedRaw);
+        if (saved && typeof saved === 'object') {
+          if (typeof saved.font === 'number' && isFinite(saved.font)) settings.font = saved.font;
+          if (typeof saved.shadow === 'number' && isFinite(saved.shadow)) settings.shadow = saved.shadow;
+          if (typeof saved.radius === 'number' && isFinite(saved.radius)) settings.radius = saved.radius;
+          if (typeof saved.dark === 'boolean') settings.dark = saved.dark;
+        }
+      }
+    } catch (e) {}
+
+    function clamp(v, min, max) {
+      return v < min ? min : (v > max ? max : v);
+    }
+
+    function applySettings(persist) {
+      settings.font = clamp(settings.font, 80, 140);
+      settings.shadow = clamp(settings.shadow, 0, 150);
+      settings.radius = clamp(settings.radius, 0, 200);
+
+      var root = document.documentElement;
+      var shScale = settings.shadow / 100;
+
+      root.style.setProperty('--font-scale', String(settings.font / 100));
+      root.style.setProperty('--sh-scale', String(shScale));
+      root.style.setProperty('--sh-a', String(Math.min(1, shScale)));
+      root.style.setProperty('--r-scale', String(settings.radius / 100));
+      root.setAttribute('data-theme', settings.dark ? 'dark' : 'light');
+
+      var meta = document.querySelector('meta[name="color-scheme"]');
+      if (meta) meta.setAttribute('content', settings.dark ? 'dark' : 'light');
+
+      fontRange.value = settings.font;
+      shadowRange.value = settings.shadow;
+      radiusRange.value = settings.radius;
+      fontVal.textContent = settings.font + '%';
+      shadowVal.textContent = settings.shadow + '%';
+      radiusVal.textContent = settings.radius + '%';
+      darkToggle.checked = settings.dark;
+
+      if (persist) {
+        try {
+          localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+        } catch (e) {}
+      }
+    }
+
+    applySettings(false);
+
+    settingsBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var open = settingsPanel.classList.toggle('show');
+      settingsBtn.classList.toggle('active', open);
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!settingsPanel.classList.contains('show')) return;
+      if (settingsPanel.contains(e.target) || settingsBtn.contains(e.target)) return;
+      settingsPanel.classList.remove('show');
+      settingsBtn.classList.remove('active');
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && settingsPanel.classList.contains('show')) {
+        settingsPanel.classList.remove('show');
+        settingsBtn.classList.remove('active');
+      }
+    });
+
+    fontRange.addEventListener('input', function() {
+      settings.font = parseInt(this.value, 10);
+      applySettings(true);
+    });
+
+    shadowRange.addEventListener('input', function() {
+      settings.shadow = parseInt(this.value, 10);
+      applySettings(true);
+    });
+
+    radiusRange.addEventListener('input', function() {
+      settings.radius = parseInt(this.value, 10);
+      applySettings(true);
+    });
+
+    darkToggle.addEventListener('change', function() {
+      settings.dark = this.checked;
+      applySettings(true);
+    });
+
+    resetSettingsBtn.addEventListener('click', function() {
+      settings = { font: defaultSettings.font, shadow: defaultSettings.shadow, radius: defaultSettings.radius, dark: defaultSettings.dark };
+      applySettings(true);
+      showToast('已恢复默认设置', 'success');
+    });
+
+    function showToast(msg, type) {
+      toastEl.textContent = msg;
+      toastEl.className = 'toast';
+      if (type === 'success') toastEl.classList.add('success');
+      else if (type === 'error') toastEl.classList.add('error');
+      void toastEl.offsetWidth;
+      toastEl.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() {
+        toastEl.classList.remove('show');
+      }, 2000);
+    }
+
+    function showEncryptInfo(msg) {
+      if (msg) {
+        encryptTranslateInfoEl.textContent = msg;
+        encryptTranslateInfoEl.classList.add('show');
+      } else {
+        encryptTranslateInfoEl.textContent = '';
+        encryptTranslateInfoEl.classList.remove('show');
+      }
+    }
+
+    function showError(el, msg) {
+      if (msg) {
+        el.textContent = msg;
+        el.classList.add('show');
+      } else {
+        el.textContent = '';
+        el.classList.remove('show');
+      }
+    }
+
+    function showSuccess(el, msg) {
+      if (msg) {
+        el.textContent = msg;
+        el.classList.add('show');
+      } else {
+        el.textContent = '';
+        el.classList.remove('show');
+      }
+    }
+
+    function copyToClipboard(text, successMsg) {
+      if (!text || text === '—') {
+        showToast('没有可复制的内容', 'error');
+        return;
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function() {
+          showToast(successMsg || '已复制到剪贴板', 'success');
+        }).catch(function() {
+          fallbackCopy(text, successMsg);
+        });
+      } else {
+        fallbackCopy(text, successMsg);
+      }
+    }
+
+    function fallbackCopy(text, successMsg) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        var ok = document.execCommand('copy');
+        if (ok) showToast(successMsg || '已复制到剪贴板', 'success');
+        else showToast('复制失败，请手动选择', 'error');
+      } catch (e) {
+        showToast('复制失败，请手动选择', 'error');
+      }
+      document.body.removeChild(ta);
+    }
+
+    function pasteFromClipboard(targetEl, successMsg) {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText().then(function(text) {
+          if (text) {
+            targetEl.value = text;
+            showToast(successMsg || '已粘贴', 'success');
+            targetEl.focus();
+          } else {
+            showToast('剪贴板为空', 'error');
+          }
+        }).catch(function() {
+          showToast('无法读取剪贴板，请手动粘贴 (Ctrl+V)', 'error');
+          targetEl.focus();
+        });
+      } else {
+        showToast('浏览器不支持一键粘贴，请手动粘贴 (Ctrl+V)', 'error');
+        targetEl.focus();
+      }
+    }
+
+    function setLoading(el, isLoading) {
+      if (isLoading) {
+        el.innerHTML = '<div class="loader"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+      }
+    }
+
+    function doEncrypt() {
+      var text = plainTextEl.value;
+      var a = parseFloat(encAEl.value);
+      var k = parseFloat(encKEl.value);
+      var autoTranslate = autoTranslateEl.checked;
+
+      showError(encryptErrorEl, '');
+      showEncryptInfo('');
+
+      if (isNaN(a) || isNaN(k)) {
+        showError(encryptErrorEl, '错误: a 和 k 必须是数字');
+        return;
+      }
+      if (a === 0) {
+        showError(encryptErrorEl, '错误: a 不能为 0 (二次项系数不能为0)');
+        return;
+      }
+
+      if (!text.trim()) {
+        encryptResultEl.textContent = '(空)';
+        return;
+      }
+
+      if (autoTranslate) {
+        var detected = detectLanguage(text);
+        if (detected !== 'en') {
+          setLoading(encryptResultEl, true);
+          translateText(text, detected, 'en')
+            .then(function(translated) {
+              var encrypted = encryptText(translated, a, k);
+              encryptResultEl.textContent = encrypted || '(空)';
+              showEncryptInfo('检测到' + getLangName(detected) + '，已翻译为: ' + translated);
+            })
+            .catch(function(err) {
+              var encrypted = encryptText(text, a, k);
+              encryptResultEl.textContent = encrypted || '(空)';
+              showEncryptInfo('翻译失败（' + err.message + '），已直接加密原文');
+            });
+          return;
+        } else {
+          showEncryptInfo('检测到英语，直接加密');
+        }
+      }
+
+      var encrypted = encryptText(text, a, k);
+      encryptResultEl.textContent = encrypted || '(空)';
+    }
+
+    function doDecrypt() {
+      var cipher = cipherTextEl.value.trim();
+      var a = parseFloat(decAEl.value);
+      var k = parseFloat(decKEl.value);
+      var translateOutput = translateOutputEl.checked;
+
+      showError(decryptErrorEl, '');
+
+      if (isNaN(a) || isNaN(k)) {
+        showError(decryptErrorEl, '错误: a 和 k 必须是数字');
+        return;
+      }
+      if (a === 0) {
+        showError(decryptErrorEl, '错误: a 不能为 0 (无法唯一解密)');
+        decryptResultEl.textContent = '—';
+        return;
+      }
+
+      if (cipher === '') {
+        decryptResultEl.textContent = '(空)';
+        return;
+      }
+
+      var decrypted;
+      try {
+        decrypted = decryptText(cipher, a, k);
+      } catch (e) {
+        decryptResultEl.textContent = '解密过程出错';
+        showError(decryptErrorEl, e.message);
+        return;
+      }
+
+      if (!decrypted) {
+        decryptResultEl.textContent = '(空)';
+        return;
+      }
+
+      if (!translateOutput) {
+        decryptResultEl.textContent = decrypted;
+        return;
+      }
+
+      var detected = detectLanguage(decrypted);
+      if (detected === 'zh-CN' || detected === 'zh-TW') {
+        decryptResultEl.textContent = decrypted;
+        return;
+      }
+
+      setLoading(decryptResultEl, true);
+      translateText(decrypted, 'en', 'zh-CN')
+        .then(function(translated) {
+          decryptResultEl.textContent = translated + '\n\n原文: ' + decrypted;
+        })
+        .catch(function(err) {
+          decryptResultEl.textContent = decrypted + '\n\n（翻译失败: ' + err.message + '）';
+        });
+    }
+
+    document.getElementById('encryptBtn').addEventListener('click', doEncrypt);
+    document.getElementById('decryptBtn').addEventListener('click', doDecrypt);
+
+    document.getElementById('clearEncBtn').addEventListener('click', function() {
+      plainTextEl.value = '';
+      encryptResultEl.textContent = '—';
+      showError(encryptErrorEl, '');
+      showEncryptInfo('');
+    });
+
+    document.getElementById('clearDecBtn').addEventListener('click', function() {
+      cipherTextEl.value = '';
+      decryptResultEl.textContent = '—';
+      showError(decryptErrorEl, '');
+    });
+
+    clearTranslateBtn.addEventListener('click', function() {
+      translateInputEl.value = '';
+      translateResultEl.textContent = '—';
+      showError(translateErrorEl, '');
+      showSuccess(translateSuccessEl, '');
+    });
+
+    applyToEncryptBtn.addEventListener('click', function() {
+      var translated = translateResultEl.textContent;
+      if (translated && translated !== '—' && !translated.startsWith('翻译')) {
+        plainTextEl.value = translated;
+        showSuccess(translateSuccessEl, '已应用到加密输入框');
+        showToast('已应用到加密输入框', 'success');
+        setTimeout(function() {
+          showSuccess(translateSuccessEl, '');
+        }, 2000);
+      } else {
+        showError(translateErrorEl, '没有可用的翻译结果');
+        setTimeout(function() {
+          showError(translateErrorEl, '');
+        }, 2000);
+      }
+    });
+
+    translateBtn.addEventListener('click', function() {
+      var text = translateInputEl.value.trim();
+      var sourceLang = sourceLangEl.value;
+
+      showError(translateErrorEl, '');
+      showSuccess(translateSuccessEl, '');
+
+      if (!text) {
+        translateResultEl.textContent = '(空)';
+        return;
+      }
+
+      if (sourceLang === 'auto') {
+        sourceLang = detectLanguage(text);
+      }
+
+      if (sourceLang === 'en') {
+        translateResultEl.textContent = text;
+        return;
+      }
+
+      translateBtn.disabled = true;
+      translateBtn.textContent = '翻译中...';
+      setLoading(translateResultEl, true);
+
+      translateText(text, sourceLang, 'en')
+        .then(function(result) {
+          translateResultEl.textContent = result || '(无结果)';
+          translateBtn.disabled = false;
+          translateBtn.textContent = '翻译为英文';
+        })
+        .catch(function(err) {
+          translateResultEl.textContent = '翻译失败';
+          showError(translateErrorEl, err.message || '翻译出错，请稍后重试');
+          translateBtn.disabled = false;
+          translateBtn.textContent = '翻译为英文';
+        });
+    });
+
+    document.getElementById('copyEncryptBtn').addEventListener('click', function() {
+      var btn = this;
+      copyToClipboard(encryptResultEl.textContent, '加密结果已复制');
+      btn.classList.add('copied');
+      setTimeout(function() { btn.classList.remove('copied'); }, 1100);
+    });
+
+    document.getElementById('copyDecryptBtn').addEventListener('click', function() {
+      var btn = this;
+      copyToClipboard(decryptResultEl.textContent, '解密结果已复制');
+      btn.classList.add('copied');
+      setTimeout(function() { btn.classList.remove('copied'); }, 1100);
+    });
+
+    document.getElementById('copyTranslateBtn').addEventListener('click', function() {
+      var btn = this;
+      copyToClipboard(translateResultEl.textContent, '翻译结果已复制');
+      btn.classList.add('copied');
+      setTimeout(function() { btn.classList.remove('copied'); }, 1100);
+    });
+
+    document.getElementById('pasteTranslateBtn').addEventListener('click', function() {
+      pasteFromClipboard(translateInputEl, '已粘贴到翻译输入框');
+    });
+
+    window.addEventListener('load', function() {
+      var sampleText = 'HELLO WORLD';
+      plainTextEl.value = sampleText;
+      var enc = encryptText(sampleText, 1, 0);
+      encryptResultEl.textContent = enc;
+
+      cipherTextEl.value = enc;
+      var dec = decryptText(enc, 1, 0);
+      decryptResultEl.textContent = dec;
+    });
+
+    (function enhanceResultAnimation() {
+      var targets = [encryptResultEl, decryptResultEl, translateResultEl];
+      if (typeof MutationObserver === 'undefined') return;
+      targets.forEach(function(el) {
+        var timer = null;
+        var observer = new MutationObserver(function() {
+          if (timer) clearTimeout(timer);
+          el.classList.remove('pop');
+          void el.offsetWidth;
+          el.classList.add('pop');
+          timer = setTimeout(function() { el.classList.remove('pop'); }, 600);
+        });
+        observer.observe(el, { childList: true, characterData: true, subtree: true });
+      });
+    })();
+
+  })();
+</script>
+</body>
+</html>
