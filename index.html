@@ -47,6 +47,66 @@
     --toggle-on-a: #3cd111;
     --toggle-on-b: #39ec05;
 
+    --sw-w: 64px;
+    --sw-h: 32px;
+    --sw-pad: 4px;
+    --sw-tw: 35.56px;
+    --sw-th: 24px;
+    --sw-travel: calc(var(--sw-w) - var(--sw-pad) * 2 - var(--sw-tw)); /* 21px */
+
+    --sw-focus: rgba(16, 255, 16, .70);
+
+    --sw-track-off-bg: linear-gradient(180deg, #EDEDEB 0%, #F7F7F5 55%, #FCFCFA 100%);
+    --sw-track-off-shadow:
+      inset 0 1px 3px  rgba(0, 0, 0, .16),
+      inset 0 1px 1px  rgba(0, 0, 0, .12),
+      inset 0 -1px 3px rgba(255, 255, 255, .95),
+      inset 0 -1px 1px rgba(255, 255, 255, .90),
+      0 1px 1px rgba(255, 255, 255, .90),
+      0 1px 1px rgba(0, 0, 0, .05);
+    --sw-track-off-active-shadow:
+      inset 0 2px 5px rgba(0, 0, 0, .22),
+      inset 0 1px 1px rgba(0, 0, 0, .16),
+      inset 0 -1px 3px rgba(255, 255, 255, .90),
+      inset 0 -1px 1px rgba(255, 255, 255, .85),
+      0 1px 1px rgba(255, 255, 255, .85);
+
+    --sw-track-on-bg: rgba(16, 255, 16, 1);
+    --sw-track-on-shadow:
+      inset 0 1px 4px  rgba(0, 0, 0, .26),
+      inset 0 1px 1px  rgba(0, 0, 0, .18),
+      inset 0 -1px 4px rgba(255, 255, 255, .22),
+      0 0 8px  rgba(16, 255, 16, .60),
+      0 1px 5px rgba(16, 255, 16, .40);
+    --sw-track-on-active-shadow:
+      inset 0 2px 5px rgba(0, 0, 0, .34),
+      inset 0 1px 1px rgba(0, 0, 0, .24),
+      inset 0 -1px 4px rgba(255, 255, 255, .20),
+      0 0 6px  rgba(16, 255, 16, .45),
+      0 1px 4px rgba(16, 255, 16, .30);
+
+    --sw-thumb-bg: linear-gradient(180deg, #FFFFFF 0%, #FDFDFC 40%, #EDEDEB 100%);
+    --sw-thumb-shadow:
+      0 1px 1px   rgba(0, 0, 0, .16),
+      0 1px 2px   rgba(0, 0, 0, .20),
+      0 3px 6px   rgba(0, 0, 0, .22),
+      0 6px 11px  rgba(0, 0, 0, .18),
+      0 10px 18px rgba(0, 0, 0, .12),
+      inset 0 1px 0 rgba(255, 255, 255, 1),
+      inset 0 -1px 2px rgba(0, 0, 0, .10);
+
+    --sw-thumb-on-bg: linear-gradient(180deg, #FFFFFF 0%, #FAFFF9 40%, #E6FFE6 100%);
+    --sw-thumb-on-shadow:
+      0 1px 1px   rgba(0, 0, 0, .14),
+      0 1px 3px   rgba(0, 0, 0, .20),
+      0 4px 6px   rgba(0, 0, 0, .22),
+      0 7px 12px  rgba(0, 0, 0, .16),
+      0 11px 20px rgba(0, 0, 0, .10),
+      0 0 8px  rgba(16, 255, 16, .75),
+      0 0 18px rgba(16, 255, 16, .50),
+      inset 0 1px 0 rgba(255, 255, 255, 1),
+      inset 0 -1px 2px rgba(0, 0, 0, .06);
+
     --ease:       cubic-bezier(.22, 1, .36, 1);
     --ease-out:   cubic-bezier(.16, 1, .3, 1);
     --ease-press: cubic-bezier(.34, .9, .4, 1);
@@ -115,6 +175,55 @@
 
     --toggle-on-a: #5E8355;
     --toggle-on-b: #42603D;
+
+    --sw-focus: rgba(46, 200, 60, .80);
+
+    --sw-track-off-bg: linear-gradient(180deg, #121215 0%, #1A1A1E 55%, #202025 100%);
+    --sw-track-off-shadow:
+      inset 0 1px 3px  rgba(0, 0, 0, .78),
+      inset 0 1px 1px  rgba(0, 0, 0, .62),
+      inset 0 -1px 3px rgba(255, 255, 255, .035),
+      inset 0 -1px 1px rgba(255, 255, 255, .030),
+      0 1px 0 rgba(255, 255, 255, .030);
+    --sw-track-off-active-shadow:
+      inset 0 2px 5px rgba(0, 0, 0, .88),
+      inset 0 1px 1px rgba(0, 0, 0, .70),
+      inset 0 -1px 3px rgba(255, 255, 255, .030),
+      inset 0 -1px 1px rgba(255, 255, 255, .025);
+
+    --sw-track-on-bg: rgba(35, 196, 42, 1);
+    --sw-track-on-shadow:
+      inset 0 1px 4px  rgba(0, 0, 0, .46),
+      inset 0 1px 1px  rgba(0, 0, 0, .34),
+      inset 0 -1px 4px rgba(255, 255, 255, .12),
+      0 0 10px rgba(35, 196, 42, .46),
+      0 1px 6px rgba(35, 196, 42, .30);
+    --sw-track-on-active-shadow:
+      inset 0 2px 5px rgba(0, 0, 0, .56),
+      inset 0 1px 1px rgba(0, 0, 0, .42),
+      inset 0 -1px 4px rgba(255, 255, 255, .10),
+      0 0 8px  rgba(35, 196, 42, .34),
+      0 1px 5px rgba(35, 196, 42, .24);
+
+    --sw-thumb-bg: linear-gradient(180deg, #4B4B54 0%, #414149 40%, #32323A 100%);
+    --sw-thumb-shadow:
+      0 1px 1px   rgba(0, 0, 0, .55),
+      0 1px 3px   rgba(0, 0, 0, .60),
+      0 3px 6px   rgba(0, 0, 0, .50),
+      0 6px 11px  rgba(0, 0, 0, .40),
+      0 10px 18px rgba(0, 0, 0, .30),
+      inset 0 1px 0 rgba(255, 255, 255, .10),
+      inset 0 -1px 2px rgba(0, 0, 0, .45);
+
+    --sw-thumb-on-bg: linear-gradient(180deg, #FFFFFF 0%, #F8FFF7 40%, #E2FBE0 100%);
+    --sw-thumb-on-shadow:
+      0 1px 1px   rgba(0, 0, 0, .50),
+      0 1px 3px   rgba(0, 0, 0, .55),
+      0 4px 6px   rgba(0, 0, 0, .45),
+      0 7px 12px  rgba(0, 0, 0, .35),
+      0 0 10px rgba(35, 196, 42, .46),
+      inset 0 1px 0 rgba(255, 255, 255, 1),
+      inset 0 -1px 2px rgba(0, 0, 0, .08);
   }
 
   * {
@@ -179,11 +288,14 @@
     transition: background .5s var(--ease), box-shadow .45s var(--ease), border-radius .35s var(--ease);
   }
 
-  @keyframes cardIn {
-    from { opacity: 0; transform: translate3d(0, 26px, 0) scale(.975); }
-    60%  { opacity: 1; }
-    to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
-  }
+@keyframes swJelly {
+  0%   { transform: scale(1,     1);     }
+  22%  { transform: scale(1.022, 0.978); }
+  44%  { transform: scale(0.988, 1.012); }
+  64%  { transform: scale(1.009, 0.991); }
+  82%  { transform: scale(0.997, 1.003); }
+  100% { transform: scale(1,     1);     }
+}
 
   .settings-btn {
     position: absolute;
@@ -225,7 +337,7 @@
     top: 70px;
     right: 20px;
     z-index: 40;
-    width: min(300px, calc(100vw - 56px));
+    width: min(320px, calc(100vw - 56px));
     padding: 18px 18px 16px;
     border-radius: calc(22px * var(--r-scale));
     background: linear-gradient(148deg, var(--s0), var(--s1));
@@ -832,32 +944,94 @@
     to   { opacity: 1; transform: translate3d(0, 0, 0); }
   }
 
+  /* ===================================================
+     加载动画（优化版：波浪点 + 扫光进度条）
+     =================================================== */
   .loader {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    padding: 22px 0 12px;
+    gap: 15px;
+    padding: 20px 0 14px;
+    animation: loaderIn .42s var(--ease-out) both;
+  }
+
+  @keyframes loaderIn {
+    from { opacity: 0; transform: translate3d(0, 6px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+
+  .loader-dots {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 14px;
   }
 
   .loader .dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    background: linear-gradient(145deg, var(--s5), var(--ink-3));
+    background: linear-gradient(145deg, var(--s0), var(--s5));
     box-shadow:
-      0 2px 4px rgba(var(--shadow-rgb), calc(.12 * var(--sh-a))),
-      inset 0 1px 0 rgba(var(--hi-rgb), .85);
-    animation: dotBounce 1.15s infinite ease-in-out both;
-    will-change: transform, opacity;
+      0 2px 5px rgba(var(--shadow-rgb), calc(.14 * var(--sh-a))),
+      inset 0 1px 0 rgba(var(--hi-rgb), .95);
+    animation: dotWave 1.35s cubic-bezier(.45, .05, .55, .95) infinite both;
+    will-change: transform, box-shadow;
   }
 
-  .loader .dot:nth-child(1) { animation-delay: -.24s; }
-  .loader .dot:nth-child(2) { animation-delay: -.12s; }
+  .loader .dot:nth-child(1) { animation-delay: -.30s; }
+  .loader .dot:nth-child(2) { animation-delay: -.15s; }
+  .loader .dot:nth-child(3) { animation-delay: 0s; }
 
-  @keyframes dotBounce {
-    0%, 80%, 100% { transform: translate3d(0, 0, 0) scale(.65); opacity: .35; }
-    40%           { transform: translate3d(0, -7px, 0) scale(1); opacity: 1; }
+  @keyframes dotWave {
+    0%, 62%, 100% {
+      transform: translate3d(0, 0, 0) scale(.78);
+      box-shadow:
+        0 1px 3px rgba(var(--shadow-rgb), calc(.10 * var(--sh-a))),
+        inset 0 1px 0 rgba(var(--hi-rgb), .85);
+    }
+    30% {
+      transform: translate3d(0, -9px, 0) scale(1.12);
+      box-shadow:
+        0 6px 12px rgba(var(--shadow-rgb), calc(.16 * var(--sh-a))),
+        inset 0 1px 0 rgba(var(--hi-rgb), .98);
+    }
+  }
+
+  .loader-bar {
+    position: relative;
+    width: 104px;
+    height: 5px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: linear-gradient(145deg, var(--s4), var(--s2));
+    box-shadow: var(--sink-sm);
+  }
+
+  .loader-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 42%;
+    border-radius: inherit;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--ink-3) 40%,
+        var(--ink-2) 60%,
+        transparent 100%);
+    opacity: .7;
+    transform: translate3d(-115%, 0, 0);
+    animation: barSweep 1.35s cubic-bezier(.55, .05, .45, .95) infinite;
+    will-change: transform;
+  }
+
+  @keyframes barSweep {
+    0%   { transform: translate3d(-115%, 0, 0); }
+    100% { transform: translate3d(310%, 0, 0); }
   }
 
   .note {
@@ -939,59 +1113,126 @@
     transition: background .5s var(--ease), border-radius .35s var(--ease);
   }
 
+  /* ===================================================
+     果冻开关（Jelly Switch）— 按比例缩小到正常尺寸
+     =================================================== */
+
+  /* 真实 checkbox 仅作状态存储，视觉隐藏但可聚焦 */
   .checkbox-row input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    position: relative;
-    flex-shrink: 0;
-    width: 46px;
-    height: 27px;
+    position: absolute;
+    width: 1px;
+    height: 1px;
     margin: 0;
     padding: 0;
-    border: none;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  /* 轨道 + 滑块容器 */
+  .sw {
+    position: relative;
+    flex: 0 0 auto;
+    display: block;
+    width: var(--sw-w);
+    height: var(--sw-h);
     border-radius: 999px;
-    background: linear-gradient(145deg, var(--s5), var(--s3));
     cursor: pointer;
-    box-shadow:
-      inset calc(3px * var(--sh-scale)) calc(3px * var(--sh-scale)) calc(6px * var(--sh-scale)) rgba(var(--shadow-rgb), calc(.09 * var(--sh-a))),
-      inset calc(-2px * var(--sh-scale)) calc(-2px * var(--sh-scale)) calc(5px * var(--sh-scale)) rgba(var(--hi-rgb), calc(.95 * var(--sh-a)));
-    transition: background .4s var(--ease), box-shadow .4s var(--ease);
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 
-  .checkbox-row input[type="checkbox"]::after {
-    content: '';
+  /* 轨道：下凹药丸 */
+  .sw-track {
     position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 21px;
-    height: 21px;
-    border-radius: 50%;
-    background: linear-gradient(145deg, var(--s0), var(--s3));
-    box-shadow:
-      0 2px 5px rgba(var(--shadow-rgb), calc(.16 * var(--sh-a))),
-      inset 0 1px 0 rgba(var(--hi-rgb), .98);
+    inset: 0;
+    border-radius: inherit;
+    background: var(--sw-track-off-bg);
+    box-shadow: var(--sw-track-off-shadow);
+    transition: background .45s var(--ease), box-shadow .45s var(--ease);
+  }
+
+  /* 滑块外层：负责位移（弹性曲线） */
+  .sw-thumb {
+    position: absolute;
+    top: var(--sw-pad);
+    left: var(--sw-pad);
+    width: var(--sw-tw);
+    height: var(--sw-th);
+    border-radius: calc(var(--sw-th) / 2);
     transform: translate3d(0, 0, 0);
-    transition: transform .46s cubic-bezier(.34, 1.4, .5, 1), background .4s var(--ease), box-shadow .4s var(--ease);
+    transition: transform .52s cubic-bezier(.34, 1.56, .64, 1);
     will-change: transform;
+    pointer-events: none;
   }
 
-  .checkbox-row input[type="checkbox"]:checked {
-    background: linear-gradient(145deg, var(--toggle-on-a), var(--toggle-on-b));
-    box-shadow:
-      inset calc(3px * var(--sh-scale)) calc(3px * var(--sh-scale)) calc(6px * var(--sh-scale)) rgba(0, 0, 0, calc(.22 * var(--sh-a))),
-      inset calc(-2px * var(--sh-scale)) calc(-2px * var(--sh-scale)) calc(5px * var(--sh-scale)) rgba(255, 255, 255, calc(.30 * var(--sh-a)));
+  /* 滑块内层：外观 + 果冻变形 */
+  .sw-thumb-inner {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--sw-thumb-bg);
+    box-shadow: var(--sw-thumb-shadow);
+    transform: scale(1, 1);
+    transform-origin: center center;
+    will-change: transform;
+    transition: background .45s var(--ease), box-shadow .45s var(--ease);
   }
 
-  .checkbox-row input[type="checkbox"]:checked::after {
-    transform: translate3d(19px, 0, 0);
-    background: linear-gradient(145deg, #FFFFFF, #F0F5EE);
-    box-shadow:
-      0 2px 6px rgba(0, 0, 0, calc(.26 * var(--sh-a))),
-      inset 0 1px 0 rgba(255, 255, 255, .98);
+  /* —— 选中态 —— */
+  .checkbox-row input[type="checkbox"]:checked ~ .sw .sw-track {
+    background: var(--sw-track-on-bg);
+    box-shadow: var(--sw-track-on-shadow);
   }
 
-  .checkbox-row label {
+  .checkbox-row input[type="checkbox"]:checked ~ .sw .sw-thumb {
+    transform: translate3d(var(--sw-travel), 0, 0);
+  }
+
+  .checkbox-row input[type="checkbox"]:checked ~ .sw .sw-thumb-inner {
+    background: var(--sw-thumb-on-bg);
+    box-shadow: var(--sw-thumb-on-shadow);
+  }
+
+  /* —— 按下时轨道凹陷加深 —— */
+  .sw:active .sw-track {
+    box-shadow: var(--sw-track-off-active-shadow);
+  }
+
+  .checkbox-row input[type="checkbox"]:checked ~ .sw:active .sw-track {
+    box-shadow: var(--sw-track-on-active-shadow);
+  }
+
+  /* —— 键盘聚焦环 —— */
+  .checkbox-row input[type="checkbox"]:focus-visible ~ .sw {
+    outline: 2px solid var(--sw-focus);
+    outline-offset: 4px;
+    border-radius: 999px;
+  }
+
+
+@keyframes swJelly {
+  0%   { transform: scale(1,     1);     }
+  22%  { transform: scale(1.045, 0.955); }
+  44%  { transform: scale(0.975, 1.025); }
+  64%  { transform: scale(1.018, 0.982); }
+  82%  { transform: scale(0.994, 1.006); }
+  100% { transform: scale(1,     1);     }
+}
+
+  .sw-thumb-inner.jelly {
+    animation: swJelly .52s cubic-bezier(.34, 1.2, .64, 1) both;
+  }
+
+  .checkbox-row label:not(.sw) {
     margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
     font-size: clamp(.77rem, 2.8vw, .83rem);
     font-weight: 650;
     letter-spacing: 0;
@@ -1274,6 +1515,10 @@
 
     <div class="checkbox-row">
       <input type="checkbox" id="darkToggle">
+      <label class="sw" for="darkToggle" aria-hidden="true">
+        <span class="sw-track"></span>
+        <span class="sw-thumb"><span class="sw-thumb-inner"></span></span>
+      </label>
       <label for="darkToggle">暗色模式</label>
     </div>
 
@@ -1282,31 +1527,32 @@
 
   <h1>
     字符加密器
-    <span>无限进步！</span>
+    <span> Lumis 2026©</span>
   </h1>
-  <div class="subhead">
-    Lumis 2026©
-  </div>
-
   <div class="grid-2">
     <div class="panel">
       <h2>加密 <i>A→1 · 1→A</i></h2>
 
       <label>待加密文本</label>
-      <textarea id="plainText" placeholder="例如: HELLO WORLD 或 1234 或 你好世界">HELLO WORLD</textarea>
+      <textarea id="plainText" placeholder="例如: HELLO WORLD 或 1234 或 你好世界"></textarea>
 
       <div class="checkbox-row">
         <input type="checkbox" id="autoTranslate" checked>
+        <label class="sw" for="autoTranslate" aria-hidden="true">
+          <span class="sw-track"></span>
+          <span class="sw-thumb"><span class="sw-thumb-inner"></span></span>
+        </label>
         <label for="autoTranslate">自动检测语言：非英语时先翻译为英文再加密</label>
       </div>
 
       <div class="row-ak">
         <div class="field">
-          <label>a (二次项系数，可为负/小数)</label>
+          <label>a (可设置为不为零负数)</label>
           <input type="number" id="encA" value="1" step="any" inputmode="decimal">
         </div>
         <div class="field">
-          <label>k (常数项，可为负/小数)</label>
+          <label>k (可设置为负数或小数)
+         </label>
           <input type="number" id="encK" value="0" step="any" inputmode="decimal">
         </div>
       </div>
@@ -1333,21 +1579,25 @@
       <h2>解密 <i>x±自检</i></h2>
 
       <label>密文 (数字或字母,逗号分隔)</label>
-      <textarea id="cipherText" placeholder="例如: 8,5,12,12,15,27,23,15,18,12,4 或 A,B,C,D">8,5,12,12,15,27,23,15,18,12,4</textarea>
+      <textarea id="cipherText" placeholder="例如: 8,5,12,12,15,27,23,15,18,12,4 或 A,B,C,D"></textarea>
 
       <div class="row-ak">
         <div class="field">
-          <label>a (同加密，可为负/小数)</label>
+          <label>a (可设置为不为零负数)</label>
           <input type="number" id="decA" value="1" step="any" inputmode="decimal">
         </div>
         <div class="field">
-          <label>k (同加密，可为负/小数)</label>
+          <label>k (可设置为负数或小数)</label>
           <input type="number" id="decK" value="0" step="any" inputmode="decimal">
         </div>
       </div>
 
       <div class="checkbox-row">
         <input type="checkbox" id="translateOutput">
+        <label class="sw" for="translateOutput" aria-hidden="true">
+          <span class="sw-track"></span>
+          <span class="sw-thumb"><span class="sw-thumb-inner"></span></span>
+        </label>
         <label for="translateOutput">将解密结果翻译为中文（勾选后输出中文）</label>
       </div>
 
@@ -1370,58 +1620,11 @@
   </div>
 
   <div class="panel translate-panel">
-    <h2>翻译工具 <i>输出英文</i></h2>
+    <h2>翻译工具</h2>
     <div class="hint">
       免费翻译服务由Lumis提供，如无法访问请检查网络。支持中文、日文、韩文、法文等多种语言。
     </div>
 
-    <div class="translate-row">
-      <div class="field field-narrow">
-        <label>源语言</label>
-        <select id="sourceLang">
-          <option value="auto" selected>自动检测</option>
-          <option value="zh-CN">中文（简体）</option>
-          <option value="zh-TW">中文（繁体）</option>
-          <option value="ja">日语</option>
-          <option value="ko">韩语</option>
-          <option value="fr">法语</option>
-          <option value="de">德语</option>
-          <option value="es">西班牙语</option>
-          <option value="ru">俄语</option>
-          <option value="pt">葡萄牙语</option>
-          <option value="it">意大利语</option>
-          <option value="ar">阿拉伯语</option>
-          <option value="en">英语（原样返回）</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>待翻译文本</label>
-        <div class="textarea-wrap">
-          <textarea id="translateInput" placeholder="输入中文或其他语言，例如：你好世界"></textarea>
-          <button class="paste-btn" id="pasteTranslateBtn" title="粘贴剪贴板内容">⎘</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="btn-group">
-      <button class="btn btn-primary" id="translateBtn">翻译为英文</button>
-      <button class="btn" id="applyToEncryptBtn">应用到加密输入框</button>
-      <button class="btn" id="clearTranslateBtn">清空</button>
-    </div>
-
-    <div class="result-box">
-      <div class="result-label">
-        <span>翻译结果（英文）</span>
-        <div class="result-actions">
-          <span class="badge">English</span>
-          <button class="icon-btn" id="copyTranslateBtn" title="复制翻译结果">⧉</button>
-        </div>
-      </div>
-      <div class="result-content" id="translateResult">—</div>
-    </div>
-    <div id="translateError" class="error-msg"></div>
-    <div id="translateSuccess" class="success-msg"></div>
-  </div>
 
   <div class="note">
    2026Lumis©
@@ -1728,6 +1931,26 @@
 
     applySettings(false);
 
+    /* ===== 果冻开关：状态变化时触发内层果冻动画 ===== */
+    (function initJellySwitches() {
+      var boxes = document.querySelectorAll('.checkbox-row input[type="checkbox"]');
+      Array.prototype.forEach.call(boxes, function(cb) {
+        var row = cb.parentNode;
+        var inner = row ? row.querySelector('.sw-thumb-inner') : null;
+        if (!inner) return;
+
+        cb.addEventListener('change', function() {
+          inner.classList.remove('jelly');
+          void inner.offsetWidth;
+          inner.classList.add('jelly');
+        });
+
+        inner.addEventListener('animationend', function() {
+          inner.classList.remove('jelly');
+        });
+      });
+    })();
+
     settingsBtn.addEventListener('click', function(e) {
       e.stopPropagation();
       var open = settingsPanel.classList.toggle('show');
@@ -1870,9 +2093,20 @@
       }
     }
 
+    /* ===== 优化后的加载动画：波浪点 + 扫光进度条 ===== */
+    var LOADER_HTML =
+      '<div class="loader">' +
+        '<div class="loader-dots">' +
+          '<span class="dot"></span>' +
+          '<span class="dot"></span>' +
+          '<span class="dot"></span>' +
+        '</div>' +
+        '<div class="loader-bar"></div>' +
+      '</div>';
+
     function setLoading(el, isLoading) {
       if (isLoading) {
-        el.innerHTML = '<div class="loader"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+        el.innerHTML = LOADER_HTML;
       }
     }
 
@@ -2087,7 +2321,7 @@
     });
 
     window.addEventListener('load', function() {
-      var sampleText = 'HELLO WORLD';
+      var sampleText = '';
       plainTextEl.value = sampleText;
       var enc = encryptText(sampleText, 1, 0);
       encryptResultEl.textContent = enc;
